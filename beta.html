@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="/front.js"></script>
+	<title>Media Browser</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!-- <link href="/assets/css/video.css" rel="stylesheet"> -->
+
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+
+</head>
+<body ng-app="Beta">
+
+    <!-- Fixed navbar -->
+	    <div id="navigation" class="navbar navbar-default navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="#"><b>Media</b></a>
+	        </div>
+	        <div class="navbar-collapse collapse">
+
+<div class="container">
+<div class="row">
+
+            <div class="input-group custom-search-form width-80">
+              <input type="text" class="form-control">
+              <span class="input-group-btn">
+              <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-search"></span>
+             </button>
+             </span>
+             </div><!-- /input-group -->
+
+	</div>
+</div>
+
+	        </div><!--/.nav-collapse -->
+	      </div>
+	    </div>
+
+
+<h2 id="main_location">Loading...</h2>
+
+<div class="row" id="cvideo" >
+	<div class="col-md-7 col-lg-7" style="float:left;">
+		<!-- artigo em destaque -->
+		<div class="featured-article video-div " style="padding-left: 20px;">
+			<video id="mainplayer" style="display:none; min-height:350px; width:482px" poster="" class="video-js vjs-default-skin" autoplay controls></video>
+			<audio controls id="mainaudio" style="display:none;" onended="javascript:return autoplayNext();" >
+ <source src="" type="audio/mpeg" id="mainaudiosource" >
+			</audio>
+		</div>
+	</div>
+<!--
+	<div class="col-md-5 col-lg-5" style="float:right; width:200px">
+	<h3 class="text-right"><a href="javascript:return switch_building_playlist();">Playlist</a></h3>
+		<ul class="media-list main-list red">
+		  <li class="media">
+			    qdqwdqwdqwd
+		  </li>
+		</ul>
+	</div>
+-->
+</div>
+
+
+<div class="row holder">
+
+	<br>
+		<div class="file-base" id="main_filelist">
+
+		</div>
+
+</div>
+
+
+<script id="tmpl_filebox" type="text/x-jquery-tmpl">
+	<div class="col-xs-3" id="filecol-${num}">
+		<ul class="row-${num}">
+			{{each items}}
+			<a href="${Key}"><li>
+				{{if $value.ctype == "directory"}}
+					<img src="/assets/img/folder.jpg" style="height:40px; " />
+				{{/if}}
+				{{if $value.icon }}
+					<img src="${icon}" style="height:40px; " onerror="if (this.src != '/assets/img/file.png') this.src = '/assets/img/file.png';">
+				{{/if}}
+			 ${Filename}</li></a>
+			{{/each}}
+		</ul>
+	</div>
+</script>
+
+<script id="tmpl_fileicon" type="text/x-jquery-tmpl">
+<a href="#" target="_new" id="fileicon_link"><img src="/assets/img/file.png" style="height:40px; " border="0"/></a>&nbsp;&nbsp;
+</script>
+
+<script id="tmpl_filepath" type="text/x-jquery-tmpl">
+<a href="/${Path}">${file}</a>&nbsp;&raquo;&nbsp;
+</script>
+
+<script type="text/javascript">
+
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
+
+var metadir = "";
+var dirdata = [];
+var cpath = "";
+var playlist = [];
+var is_building_playlist = false;
+var currently_playing = null;
+
+
+function switch_building_playlist() {
+	if (is_building_playlist)
+		is_building_playlist = false;
+	else
+		is_building_playlist = true;
+	return false;
+}
+
+function getExtensionFromKey(key) {
+	var ckeys = key.split(".");
+	return ckeys[ckeys.length - 1];
+}
+
+function isVideo(ext) {
+	return (["avi", "mpg", "mpeg", "mp4", "mkv", "wmv", "flv", "mov"].indexOf(ext.toLowerCase()) > -1);
+}
+
+function isMusic(ckey) {
+	return ((ckey.toLowerCase().endsWith(".mp3")) || (ckey.toLowerCase().endsWith(".ogg")));
+}
+
+function download_file_link(clink) {
+	$.get("/file.json", {"key" : clink}, function(data) {
+		$("#fileicon_link").attr("href", data["url"]);
+		return false;
+	});
+	return false;
+}
+
+
+function redraw_video(ckey) {
+	console.log("showing file: ",ckey);
+	$("#tmpl_fileicon").tmpl({}).prependTo("#main_location");
+	download_file_link(ckey);
+	if (isMusic(ckey)) {
+		// start playing audio file
+		$.get("/file.json", {"key" : ckey}, function(data) {
+			currently_playing = ckey;
+			$("#cvideo").show();
+			$("#cvideo").css("min-height","");
+			$("#mainplayer").hide();
+			$("#mainaudio").show();
+			$("#mainaudiosource").attr("src", data["url"]);
+			var video = document.getElementById("mainplayer");
+			if (!video.paused)
+	        	video.pause();
+			var audio = document.getElementById("mainaudio");
+			audio.load();
+			if (audio.paused)
+	        	audio.play();
+			return false;
+		});
+	} else if (isVideo(getExtensionFromKey(ckey))) {
+		// start playing video file
+		var cr = CryptoJS.SHA1(ckey).toString(CryptoJS.enc.Hex);
+		$("#cvideo").show();
+		$("#cvideo").css("min-height","400px");
+		$("#mainplayer").show();
+		$("#mainaudio").hide();
+		var url = "https://s3-us-west-1.amazonaws.com/"+metadir+"/video/"+cr.substring(0,2)+"/"+cr;
+		$("#mainplayer").attr("src", url);
+		var video = document.getElementById("mainplayer");
+		if (video.paused)
+        	video.play();
+        var audio = document.getElementById("mainaudio");
+        if (!audio.paused)
+        	audio.pause();
+		return false;
+	} else {
+		// just open the file in a new tab
+		$.get("/file.json", {"key" : ckey}, function(data) {
+			window.open(data["url"]);
+		});
+	}
+}
+
+// when the current audio ends, auto play the next from the same directory
+function autoplayNext() {
+	console.log("audio ended");
+	var cdir = currently_playing.split("/");
+	var cfn = cdir.pop();
+	var cck = dirdata;
+	for (var i = 0; i < cdir.length; i++) {
+		cck = cck[cdir[i]];
+	}
+	if (cck == null)
+		return false;
+	var swnext = false;
+	for (var k in cck) {
+		var cm = cck[k];
+		if (cm.constructor === undefined || cm.constructor !== Array) {
+			if (k == cfn) {
+				swnext = true;
+				continue;
+			}
+			if ((swnext) && (isMusic(k))) {
+				redraw_nagivation(cdir.join("/")+"/"+k);
+				return false;
+			}
+		}
+	}
+}
+
+function keyencode(key) {
+	return (key.replace("#", "%23"));
+}
+
+// draws one filecol with given items
+function redraw_filecol(filecolno, datalist, cdir) {
+	var cdata = [];
+	for (var key in datalist) {
+		if (datalist[key].constructor && datalist[key].constructor === Array) {
+			var cckey = ((cdir.length == 0)?(""):("/")) + cdir.join("/")+"/"+key;
+			cdata.push({"ctype" : "directory", "Filename" : key, "Key" : cckey, "icon" : "" });
+		} else {
+			var url = "https://s3-us-west-1.amazonaws.com/"+metadir+"/thm/";
+			var cr = CryptoJS.SHA1(datalist[key]["Key"]).toString(CryptoJS.enc.Hex);
+			var thm = url+cr.substring(0,2)+'/'+cr;
+			cdata.push({"ctype" : "file", "Filename" : key, "Key" : "/"+datalist[key]["Key"], "icon" : thm });
+		}
+	}
+	$("#tmpl_filebox").tmpl( {"num" : (filecolno), "items" : cdata } ).appendTo("#main_filelist");
+	return true;
+}
+
+function redraw_nagivation(loc) {
+	var cps = loc.split("/").filter(function(cm) { return (cm.trim() != ""); });
+	$(".file-base").css("width", ((cps.length+1) * 311)+"px");
+	console.log(cps.length);
+	var fromnavcps = cpath.split("/").filter(function(cm) { return (cm.trim() != ""); });
+	console.log("moving from ",fromnavcps," to ",cps);
+	// first remove all diff paths
+	var isdiff = false;
+	for (var i = 0;i<fromnavcps.length;i++) {
+		if ((!isdiff) && (i < cps.length) && (cps[i] == fromnavcps[i]))
+			continue;
+		isdiff = true;
+		// console.log("removing: #filecol-"+(i+1));
+		if ($("#filecol-"+(i+1)).length > 0) {
+			$("#filecol-"+(i+1)).remove();
+		}
+	}
+
+	// add new file navigators
+	var cck = dirdata;
+	var cdir = [];
+	isdiff = false;
+	for (var i = 0; i < cps.length; i++) {
+		cck = cck[cps[i]];
+		cdir.push(cps[i]);
+		if ((!isdiff) && (i<fromnavcps.length) && (cps[i] == fromnavcps[i]))
+			continue;
+		isdiff = true;
+		if (cck === undefined)
+		{
+			// console.log("undef'd");
+		} else  if (cck.constructor === undefined || cck.constructor !== Array) {
+			// console.log("Adding "+cps[i]+" as video");
+			redraw_video(cck["Key"]);
+		} else {
+			// console.log("Adding "+cps[i]+" as #filecol-"+(i+1));
+			redraw_filecol((i+1), cck, cdir);
+		}
+	}
+	cpath = loc;
+}
+
+// main routing
+function mainroute(loc) {
+	var cps = loc.split("/").filter(function(cm) { return (cm.trim() != ""); });
+
+	// set dirpath
+	var dirpath = [];
+	var cd = [];
+	dirpath.push( { "Path" : "", "file" : "Media" });
+	for (var c in cps) {
+		if ((cps[c] == "") || (cps[c] == "/"))
+			continue;
+		cd.push(cps[c]);
+		dirpath.push( { "Path" : cd.join("/"), "file" : decodeURI(cps[c]) });
+	}
+	$("#main_location").html(""); $("#tmpl_filepath").tmpl(dirpath).appendTo("#main_location");
+	redraw_nagivation(loc);
+
+}
+
+$(document).ready(function () {
+	$.get("/data.json", {}, function(data) {
+		for (var k in data) {
+			var ckeys = data[k]["Key"].split("/").filter(function(cm) { return (cm.trim() != ""); });
+
+			// create dir structure
+			var ccp = dirdata;
+			for (var c = 0; c < ckeys.length - 1; c++) {
+				if (ccp[ckeys[c]] === undefined)
+					ccp[ckeys[c]] = [];
+				ccp = ccp[ckeys[c]];
+			}
+			if (data[k]["Key"].endsWith("/")) {
+				ccp[ckeys[c]] = [];
+			} else {
+				ccp[ckeys[c]] = data[k];
+			}
+		}
+		$(document).on("click", "a", function() {
+			var href = $(this).attr("href");
+			history.pushState({}, '', href);
+			mainroute(href);
+			return false;
+		});
+		redraw_filecol(0, dirdata, []);
+		mainroute(window.location.pathname);
+	} );
+
+});
+
+window.onpopstate = function(event) {
+	mainroute(window.location.pathname);
+}
+
+
+</script>
+
+
+</body>
+</html>

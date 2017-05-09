@@ -1,0 +1,27 @@
+{
+  "name": "media-github",
+  "version": "1.0.0",
+  "description": "",
+  "main": "beta.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdrinf/nodejs-s3-media.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sdrinf/nodejs-s3-media/issues"
+  },
+  "homepage": "https://github.com/sdrinf/nodejs-s3-media#readme",
+  "dependencies": {
+    "aws-sdk": "^2.49.0",
+    "basic-auth-connect": "^1.0.0",
+    "bluebird": "^3.5.0",
+    "compression": "^1.6.2",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2"
+  }
+}

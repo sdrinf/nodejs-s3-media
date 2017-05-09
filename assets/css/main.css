@@ -1,0 +1,292 @@
+
+body {
+  background-color: #f2f2f2;
+    font-family: "Lato";
+    font-weight: 300;
+    font-size: 16px;
+    color: #555;
+    padding-top: 50px;
+
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway";
+    font-weight: 300;
+    color: #333;
+}
+
+
+/* Paragraph & Typographic */
+p {
+    line-height: 28px;
+    margin-bottom: 25px;
+}
+
+.centered {
+    text-align: center;
+}
+
+/* Links */
+a {
+    color: #3bc492;
+    word-wrap: break-word;
+
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+    color: #c0392b;
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+ hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+
+h3.text-center {
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: -4px;
+}
+
+/* ==========================================================================
+   Wrap Sections
+   ========================================================================== */
+
+#headerwrap {
+	background-color: #34495e;
+	padding-top: 60px;
+}
+
+#headerwrap h1 {
+	margin-top: 30px;
+	color: white;
+	font-size: 70px;
+
+}
+
+#headerwrap h3 {
+	color: white;
+	font-size: 30px;
+}
+
+#headerwrap h5 {
+	color: white;
+	font-weight: 700;
+	text-align: left;
+}
+
+#headerwrap p {
+	text-align: left;
+	color: white
+}
+
+/* intro Wrap */
+
+#intro {
+	padding-top: 50px;
+	border-top: #bdc3c7 solid 5px;
+}
+
+#features {
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+#features .ac a{
+	font-size: 20px;
+}
+
+/* Showcase Wrap */
+
+#showcase {
+	display: block;
+	background-color: #34495e;
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+#showcase h1 {
+	color: white;
+}
+
+#footerwrap {
+	background-color: #2f2f2f;
+	color: white;
+	padding-top: 40px;
+	padding-bottom: 60px;
+	text-align: left;
+}
+
+#footerwrap h3 {
+	font-size: 28px;
+	color: white;
+}
+
+#footerwrap p {
+	color: white;
+	font-size: 18px;
+}
+
+/* Copyright Wrap */
+
+#c {
+	background: #222222;
+	padding-top: 15px;
+	text-align: right;
+}
+
+#c p {
+	color: white
+}
+
+.width-80 {
+
+    width: 80%;
+    margin-top: 10px;
+    float: right;
+}
+
+.red-bk {
+    /*background: gray;*/
+    opacity: .8;
+}
+ .media {
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    text-align: right;
+    float: right;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+
+}
+
+
+ul.red {
+    height: 450px;
+    /*background: blue;*/
+    overflow-y: scroll;
+}
+
+ul.red li {
+    /*background: red;*/
+    width: 100%;
+}
+
+.video-div {
+    /*background: red*/;
+}
+.media {
+    -webkit-transition: .7s;
+    -moz-transition: .7s;
+    -ms-transition: .7s;
+    -o-transition: .7s;
+    transition: .7s;
+}
+.media:hover {
+    background: #eaeaea;
+}
+.seperator {
+    background: red;
+    height: 1px;
+}
+
+.file-base {
+    background: blue;
+    width: 1200px;
+}
+
+.holder {
+    overflow: auto;
+    overflow-y: hidden;
+    /* height: 400px;*/
+}
+
+.file-base ul {
+    overflow-y: scroll;
+    height: 600px; 
+    list-style-type: none;
+    margin: 0 auto;
+    text-align: left;
+    background: white;
+}
+
+ul li {
+    -webkit-transition: .6s;
+    -moz-transition: .6s;
+    -ms-transition: .6s;
+    -o-transition: .6s;
+    transition: .6s;
+}
+
+ul li:hover {
+    background: #eaeaea;
+    opacity: .6;
+    color: black;
+}
+
+.row-1 {
+    background: white;
+}
+
+/*
+.row-2 {
+    display: none;
+}
+.row-3 {
+    display: none;
+}
+.row-4 {
+    display: none;
+}
+.row-5 {
+    display: none;
+}*/
+
+.file-base ul li {
+
+    width: 105%;
+    margin: 10px 0;
+    margin-left: -25px;
+    padding: 15px 0;
+    text-decoration: none;
+    color: black;
+    padding-left: 10px;
+}
+
+.file-base .col-xs-3 {
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+ul li {
+    margin-left: -40px;
+    border-bottom: 1px solid #ccc;
+
+}
+
