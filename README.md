@@ -1,6 +1,6 @@
 # nodejs-s3-media
 
-![nodejs-s3-media](https://octodex.github.com/images/yaktocat.png)
+![nodejs-s3-media](https://raw.githubusercontent.com/sdrinf/nodejs-s3-media/master/media.screenshot.png)
 
 Features:
 * Automatically read & index S3 buckets
